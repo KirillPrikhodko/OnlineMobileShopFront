@@ -11,6 +11,7 @@ data class Product(
     @SerializedName("description") val description: String,
     @SerializedName("image") val imageUrl: String,
     @SerializedName("stock") val stockQuantity: Int
+
 )
 
 data class Review(

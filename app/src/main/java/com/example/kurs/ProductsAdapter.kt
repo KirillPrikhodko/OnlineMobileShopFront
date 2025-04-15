@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class ProductsAdapter(
-    private val products: List<Product>,
+    var products: List<Product>,
     private val baseurel:String,
     private val onItemClick: (Product) -> Unit
 
@@ -22,6 +24,7 @@ class ProductsAdapter(
         val brand: TextView = view.findViewById(R.id.productBrand)
         val price: TextView = view.findViewById(R.id.productPrice)
         val stock: TextView = view.findViewById(R.id.stockStatus)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -49,8 +52,13 @@ class ProductsAdapter(
             .error(R.drawable.error_image)
             .into(holder.image)
 
-        holder.itemView.setOnClickListener { onItemClick(product) }
+        holder.image.setOnClickListener {
+            onItemClick.invoke(product)
+        }
     }
 
     override fun getItemCount() = products.size
+    fun reload() {
+        notifyDataSetChanged()
+    }
 }

@@ -3,6 +3,7 @@ package com.example.kurs
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -29,12 +30,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        // Раскомментируйте и измените в setupRecyclerView:
         productsAdapter = ProductsAdapter(emptyList(), RetrofitClient.BASE_URL) { product ->
-            // Обработка клика по товару
-//            val intent = Intent(this, ProductDetailActivity::class.java).apply {
-//                putExtra("PRODUCT_ID", product.id)
-//            }
+            Log.e("jkl", "hj")
+            val intent = Intent(this, ProductDetailActivity::class.java).apply {
+                putExtra("PRODUCT_ID", product.id)
+            }
             startActivity(intent)
+
         }
         binding.productsRecyclerView.adapter = productsAdapter
     }
@@ -48,10 +51,8 @@ class MainActivity : AppCompatActivity() {
                 val response = apiService.getProducts()
                 if (response.isSuccessful) {
                     val products = response.body() ?: emptyList()
-                    productsAdapter = ProductsAdapter(products, RetrofitClient.BASE_URL) { product ->
-                        // Обработка клика
-                    }
-                    binding.productsRecyclerView.adapter = productsAdapter
+                    productsAdapter.products = products
+                    productsAdapter.reload()
                 } else {
                     showError("Ошибка загрузки: ${response.code()}")
                 }

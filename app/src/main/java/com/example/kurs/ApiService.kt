@@ -45,4 +45,9 @@ interface ApiService {
     suspend fun getUserOrders(
         @Header("Authorization") token: String
     ): Response<List<Order>>
+
+    @GET("products/{product_id}")
+    suspend fun getProductById(
+        @Path("product_id") productId: Int
+    ): Response<Product>
 }
