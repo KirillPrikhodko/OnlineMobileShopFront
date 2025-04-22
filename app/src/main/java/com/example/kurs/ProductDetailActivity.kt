@@ -1,5 +1,6 @@
 package com.example.kurs
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -31,6 +32,17 @@ class ProductDetailActivity : AppCompatActivity() {
         setupRecyclerView()
         loadProductDetails()
         loadReviews()
+
+        // Настройка Toolbar с кнопкой "Назад"
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    // Обработка нажатия кнопки "Назад" в Toolbar
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setupRecyclerView() {
@@ -88,9 +100,28 @@ class ProductDetailActivity : AppCompatActivity() {
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.error_image)
                 .into(productImage)
+
+            addToCartButton.setOnClickListener {
+                // Добавляем товар в корзину
+                CartManager.addToCart(product)
+
+                // Показываем уведомление
+                Toast.makeText(this@ProductDetailActivity, "${product.name} добавлен в корзину", Toast.LENGTH_SHORT).show()
+
+                // Открываем экран корзины
+                openCartActivity()
+
+            }
         }
     }
 
+    private fun openCartActivity() {
+        val intent = Intent(this, CartActivity::class.java)
+        startActivity(intent)
+
+        // Если нужно закрыть текущий экран:
+        // finish()
+    }
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }

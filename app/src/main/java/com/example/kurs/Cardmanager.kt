@@ -15,7 +15,29 @@ object CartManager {
     fun init(context: Context) {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
+    fun increaseQuantity(productId: Int) {
+        val items = getCartItems()
+        items.find { it.productId == productId }?.let {
+            it.quantity += 1
+            saveCartItems(items)
+        }
+    }
 
+    fun decreaseQuantity(productId: Int) {
+        val items = getCartItems()
+        items.find { it.productId == productId }?.let {
+            if (it.quantity > 1) {
+                it.quantity -= 1
+                saveCartItems(items)
+            } else {
+                removeFromCart(productId)
+            }
+        }
+    }
+
+    fun getItemCount(productId: Int): Int {
+        return getCartItems().find { it.productId == productId }?.quantity ?: 0
+    }
     private fun getCartItems(): MutableList<CartItem> {
         val json = prefs.getString(KEY_CART_ITEMS, null)
         return if (json != null) {

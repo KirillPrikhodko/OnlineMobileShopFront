@@ -20,12 +20,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        CartManager.init(applicationContext)
 
         setupRecyclerView()
         loadProducts()
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             loadProducts()
+        }
+        binding.fabCart.setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
         }
     }
 
