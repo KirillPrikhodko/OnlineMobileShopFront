@@ -25,7 +25,6 @@ interface ApiService {
     // Orders
     @POST("orders")
     suspend fun createOrder(
-        @Header("Authorization") token: String,
         @Body orderRequest: OrderRequest
     ): Response<OrderResponse>
 

@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kurs.RetrofitClient.apiService
 import com.example.kurs.databinding.ActivityCartBinding
+import kotlinx.coroutines.launch
 
 class CartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCartBinding
@@ -31,7 +34,7 @@ class CartActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = CartAdapter {
-            updateCartViews()
+            loadCartItems()
         }
 
         binding.cartRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -76,9 +79,17 @@ class CartActivity : AppCompatActivity() {
             .setTitle("Оформление заказа")
             .setMessage("Подтвердите оформление заказа на сумму ${CartManager.getTotalPrice()} ₽")
             .setPositiveButton("Подтвердить") { _, _ ->
-                CartManager.clearCart()
-                Toast.makeText(this, "Заказ успешно оформлен!", Toast.LENGTH_SHORT).show()
-                finish()
+                Toast.makeText(
+                    this@CartActivity,
+                    "Заказ успешно оформлен!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+
+                    CartManager.clearCart()
+
+                    finish()
+
             }
             .setNegativeButton("Отмена", null)
             .show()

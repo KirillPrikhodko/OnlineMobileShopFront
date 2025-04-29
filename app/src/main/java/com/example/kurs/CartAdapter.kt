@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.kurs.R
 
 class CartAdapter(
     private val onCartUpdated: () -> Unit
@@ -46,26 +45,29 @@ class CartAdapter(
 
             removeButton.setOnClickListener {
                 CartManager.removeFromCart(item.productId)
-                notifyItemRemoved(adapterPosition)
                 onCartUpdated()
+                notifyDataSetChanged()
+
             }
 
             decreaseButton.setOnClickListener {
                 CartManager.decreaseQuantity(item.productId)
+                onCartUpdated()
                 if (CartManager.getItemCount(item.productId) > 0) {
                     quantityTextView.text = CartManager.getItemCount(item.productId).toString()
                     priceTextView.text = "%.2f ₽".format(item.price * CartManager.getItemCount(item.productId))
                 } else {
-                    notifyItemRemoved(adapterPosition)
+                    notifyDataSetChanged()
                 }
-                onCartUpdated()
+
             }
 
             increaseButton.setOnClickListener {
                 CartManager.increaseQuantity(item.productId)
+                onCartUpdated()
                 quantityTextView.text = CartManager.getItemCount(item.productId).toString()
                 priceTextView.text = "%.2f ₽".format(item.price * CartManager.getItemCount(item.productId))
-                onCartUpdated()
+
             }
         }
     }

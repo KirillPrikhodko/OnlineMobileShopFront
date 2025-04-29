@@ -38,6 +38,24 @@ object CartManager {
     fun getItemCount(productId: Int): Int {
         return getCartItems().find { it.productId == productId }?.quantity ?: 0
     }
+    fun createOrderRequest(
+        shippingAddress: String,
+        paymentMethod: String
+    ): OrderRequest {
+        val cartItems = getCartItems()
+        val orderItems = cartItems.map { cartItem ->
+            OrderItem(
+                productId = cartItem.productId,
+                quantity = cartItem.quantity
+            )
+        }
+
+        return OrderRequest(
+            items = orderItems,
+            shippingAddress = shippingAddress,
+            paymentMethod = paymentMethod
+        )
+    }
     private fun getCartItems(): MutableList<CartItem> {
         val json = prefs.getString(KEY_CART_ITEMS, null)
         return if (json != null) {
